@@ -1,7 +1,10 @@
+import torch
+
+# Hugging Face Model
 MODEL_ID = "runwayml/stable-diffusion-v1-5"
 
-# Device
-DEVICE = "cpu"
+# Automatically select device
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 # Output Folder
 OUTPUT_FOLDER = "outputs"
