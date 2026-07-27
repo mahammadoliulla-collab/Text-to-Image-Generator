@@ -78,6 +78,8 @@ class ImageGenerator:
         print("\nGenerating Images...")
         print("=" * 55)
 
+        generated_images = []
+
         for i in range(num_images):
 
             # Seed
@@ -86,7 +88,7 @@ class ImageGenerator:
             else:
                 current_seed = int(seed)
 
-            # Generator on the correct device
+            # Generator on correct device
             generator = torch.Generator(
                 device=self.pipeline.device
             ).manual_seed(current_seed)
@@ -113,6 +115,9 @@ class ImageGenerator:
 
             # Save Image
             image.save(save_path)
+
+            # Remember generated image
+            generated_images.append(save_path)
 
             # Save Metadata
             save_metadata(
@@ -145,13 +150,8 @@ class ImageGenerator:
             print(f"📝 Metadata Saved : {save_path.replace('.png', '.txt')}")
             print("📚 History Updated")
 
-            # Display image (Colab) or open locally
-            try:
-                from IPython.display import display
-                display(image)
-            except Exception:
-                image.show()
-
         print("\n" + "=" * 55)
         print("🎉 ALL IMAGES GENERATED SUCCESSFULLY")
         print("=" * 55)
+
+        return generated_images
