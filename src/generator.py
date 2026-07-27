@@ -86,7 +86,10 @@ class ImageGenerator:
             else:
                 current_seed = int(seed)
 
-            generator = torch.Generator(device="cpu").manual_seed(current_seed)
+            # Generator on the correct device
+            generator = torch.Generator(
+                device=self.pipeline.device
+            ).manual_seed(current_seed)
 
             print(f"\nGenerating Image {i+1}/{num_images}")
             print(f"Seed : {current_seed}")
@@ -142,7 +145,12 @@ class ImageGenerator:
             print(f"📝 Metadata Saved : {save_path.replace('.png', '.txt')}")
             print("📚 History Updated")
 
-            image.show()
+            # Display image (Colab) or open locally
+            try:
+                from IPython.display import display
+                display(image)
+            except Exception:
+                image.show()
 
         print("\n" + "=" * 55)
         print("🎉 ALL IMAGES GENERATED SUCCESSFULLY")
