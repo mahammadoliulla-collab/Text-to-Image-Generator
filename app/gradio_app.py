@@ -184,4 +184,7 @@ Generate high-quality AI images from text prompts.
         ],
     )
 
-demo.launch()
+demo.launch(
+    share=True,
+    debug=True,
+)
