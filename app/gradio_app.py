@@ -46,6 +46,8 @@ def generate(
         num_images=num_images,
     )
 
+    gallery = [item["image_path"] for item in result]
+
     first = result[0]
 
     info = f"""
@@ -66,7 +68,7 @@ def generate(
 **Image Path:** {first['image_path']}
 """
 
-    return first["image_path"], info
+    return gallery, info
 
 
 # ==========================================
@@ -79,9 +81,7 @@ with gr.Blocks(title="Text-to-Image Generator") as demo:
         """
 # 🖼️ Text-to-Image Generator
 
-### Stable Diffusion 1.5
-
-Generate high-quality AI images from text prompts.
+### Generate high-quality AI images from text prompts.
 """
     )
 
@@ -96,7 +96,7 @@ Generate high-quality AI images from text prompts.
             prompt = gr.Textbox(
                 label="Prompt",
                 lines=3,
-                placeholder="Describe the image..."
+                placeholder="Describe your image..."
             )
 
             negative_prompt = gr.Textbox(
@@ -108,16 +108,16 @@ Generate high-quality AI images from text prompts.
             with gr.Row():
 
                 width = gr.Dropdown(
-                choices=[512, 768],
-                value=512,
-                label="Width",
-            )
+                    choices=[512, 768],
+                    value=512,
+                    label="Width",
+                )
 
                 height = gr.Dropdown(
-                choices=[512, 768],
-                value=512,
-                label="Height",
-            )
+                    choices=[512, 768],
+                    value=512,
+                    label="Height",
+                )
 
             steps = gr.Slider(
                 minimum=10,
@@ -159,9 +159,11 @@ Generate high-quality AI images from text prompts.
 
         with gr.Column(scale=1):
 
-            output_image = gr.Image(
-                label="Generated Image",
-                type="filepath",
+            output_gallery = gr.Gallery(
+                label="Generated Images",
+                columns=2,
+                rows=2,
+                height=500,
             )
 
             output_info = gr.Markdown()
@@ -179,7 +181,7 @@ Generate high-quality AI images from text prompts.
             num_images,
         ],
         outputs=[
-            output_image,
+            output_gallery,
             output_info,
         ],
     )
