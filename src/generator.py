@@ -1,5 +1,6 @@
 import torch
 import random
+import time
 from datetime import datetime
 
 from src.prompt_processor import PromptProcessor
@@ -88,13 +89,14 @@ class ImageGenerator:
             else:
                 current_seed = int(seed)
 
-            # Generator on correct device
             generator = torch.Generator(
                 device=self.pipeline.device
             ).manual_seed(current_seed)
 
             print(f"\nGenerating Image {i+1}/{num_images}")
             print(f"Seed : {current_seed}")
+
+            start_time = time.time()
 
             image = self.pipeline(
                 prompt=prompt,
@@ -106,6 +108,8 @@ class ImageGenerator:
                 generator=generator,
             ).images[0]
 
+            generation_time = round(time.time() - start_time, 2)
+
             # Timestamp
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -115,9 +119,6 @@ class ImageGenerator:
 
             # Save Image
             image.save(save_path)
-
-            # Remember generated image
-            generated_images.append(save_path)
 
             # Save Metadata
             save_metadata(
@@ -146,9 +147,24 @@ class ImageGenerator:
                 }
             )
 
+            generated_images.append(
+                {
+                    "image_path": save_path,
+                    "prompt": prompt,
+                    "negative_prompt": negative_prompt,
+                    "width": width,
+                    "height": height,
+                    "steps": steps,
+                    "cfg": cfg,
+                    "seed": current_seed,
+                    "generation_time": generation_time,
+                }
+            )
+
             print(f"✅ Image Saved     : {save_path}")
             print(f"📝 Metadata Saved : {save_path.replace('.png', '.txt')}")
             print("📚 History Updated")
+            print(f"⏱️ Generation Time : {generation_time} sec")
 
         print("\n" + "=" * 55)
         print("🎉 ALL IMAGES GENERATED SUCCESSFULLY")
