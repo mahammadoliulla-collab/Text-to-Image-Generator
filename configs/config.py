@@ -1,23 +1,47 @@
 import torch
 
-# Hugging Face Model
-MODEL_ID = "runwayml/stable-diffusion-v1-5"
+# ==========================================================
+# MODEL CONFIGURATION
+# ==========================================================
 
-# Automatically select device
+MODELS = {
+    "Stable Diffusion 1.5": "runwayml/stable-diffusion-v1-5",
+    #"SDXL": "stabilityai/stable-diffusion-xl-base-1.0",
+    #"FLUX.1 Dev": "black-forest-labs/FLUX.1-dev",
+}
+
+DEFAULT_MODEL = "Stable Diffusion 1.5"
+
+# ==========================================================
+# DEVICE
+# ==========================================================
+
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
-# Output Folder
+# ==========================================================
+# OUTPUT
+# ==========================================================
+
 OUTPUT_FOLDER = "outputs"
 
-# Image Settings
+# ==========================================================
+# IMAGE SETTINGS
+# ==========================================================
+
 IMAGE_WIDTH = 512
 IMAGE_HEIGHT = 512
 
-# Sampling Settings
+# ==========================================================
+# SAMPLING
+# ==========================================================
+
 NUM_INFERENCE_STEPS = 25
 GUIDANCE_SCALE = 7.5
 
-# Default Negative Prompt
+# ==========================================================
+# NEGATIVE PROMPT
+# ==========================================================
+
 NEGATIVE_PROMPT = (
     "blurry, low quality, watermark, text, logo, "
     "distorted, bad anatomy, ugly"

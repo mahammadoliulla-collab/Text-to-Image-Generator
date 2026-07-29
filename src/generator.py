@@ -96,20 +96,23 @@ class ImageGenerator:
             print(f"\nGenerating Image {i+1}/{num_images}")
             print(f"Seed : {current_seed}")
 
-            start_time = time.time()
+            overall_start = time.time()
+
+            print("🔄 Preparing generation...")
 
             image = self.pipeline(
-                prompt=prompt,
-                negative_prompt=negative_prompt,
-                height=height,
-                width=width,
-                num_inference_steps=steps,
-                guidance_scale=cfg,
-                generator=generator,
+            prompt=prompt,
+            negative_prompt=negative_prompt,
+            height=height,
+            width=width,
+            num_inference_steps=steps,
+            guidance_scale=cfg,
+            generator=generator,
             ).images[0]
 
-            generation_time = round(time.time() - start_time, 2)
+            generation_time = round(time.time() - overall_start, 2)
 
+            print(f"✅ Finished in {generation_time:.2f} sec")
             # Timestamp
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 

@@ -1,36 +1,46 @@
 import json
 import os
 
+HISTORY_FILE = "outputs/history.json"
 
-HISTORY_FILE = "history.json"
 
-
-def save_history(entry):
-    """
-    Save every generated image information
-    into history.json
-    """
+def save_history(record):
 
     history = []
 
-    # Load previous history
     if os.path.exists(HISTORY_FILE):
 
         try:
-            with open(HISTORY_FILE, "r", encoding="utf-8") as file:
-                history = json.load(file)
+
+            with open(HISTORY_FILE, "r") as f:
+
+                history = json.load(f)
 
         except:
+
             history = []
 
-    # Add new entry
-    history.append(entry)
+    history.insert(0, record)
 
-    # Save updated history
-    with open(HISTORY_FILE, "w", encoding="utf-8") as file:
-        json.dump(
-            history,
-            file,
-            indent=4,
-            ensure_ascii=False,
-        )
+    history = history[:20]
+
+    with open(HISTORY_FILE, "w") as f:
+
+        json.dump(history, f, indent=4)
+
+
+def load_history():
+
+    if not os.path.exists(HISTORY_FILE):
+
+        return []
+
+    try:
+
+        with open(HISTORY_FILE, "r") as f:
+
+            return json.load(f)
+
+    except:
+
+        return []
