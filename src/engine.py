@@ -1,50 +1,46 @@
 from models.model_loader import ModelLoader
 from src.generator import ImageGenerator
 
-from configs.config import DEFAULT_MODEL
-
 
 class TextToImageEngine:
 
     def __init__(self):
 
-        print("=" * 60)
-        print("Initializing Text-to-Image Engine")
-        print("=" * 60)
-
-        self.loader = ModelLoader()
-
         self.current_model = None
         self.pipeline = None
         self.generator = None
 
-        self.load_model(DEFAULT_MODEL)
-
-        print("\n✅ Engine Ready!")
-
-    # ======================================================
+    # ==========================================================
     # LOAD MODEL
-    # ======================================================
+    # ==========================================================
 
     def load_model(self, model_name):
 
+        # Don't reload the same model
         if self.current_model == model_name:
             return
 
-        print(f"\n🔄 Switching to: {model_name}")
+        print("=" * 60)
+        print(f"Initializing {model_name}")
+        print("=" * 60)
 
-        self.pipeline = self.loader.load(model_name)
+        loader = ModelLoader()
+
+        self.pipeline = loader.load(model_name)
 
         self.generator = ImageGenerator(self.pipeline)
 
         self.current_model = model_name
 
-    # ======================================================
+        print(f"\n✅ {model_name} Ready!")
+
+    # ==========================================================
     # GENERATE
-    # ======================================================
+    # ==========================================================
 
     def generate(
         self,
+        model_name,
         prompt,
         negative_prompt="",
         width=512,
@@ -53,9 +49,9 @@ class TextToImageEngine:
         cfg=7.5,
         seed="",
         num_images=1,
-        model_name=DEFAULT_MODEL,
     ):
 
+        # Automatically load the selected model
         self.load_model(model_name)
 
         return self.generator.generate(
